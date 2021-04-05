@@ -1,9 +1,8 @@
 // global vars
-
 const apiKey = 'ec2a8c3202f503524ea99b9adbc61f8d';
 const baseURL = 'http://api.openweathermap.org/';
 const request = require('request');
-
+const data = [];
 
 // Setup empty JS object to act as endpoint for all routes
 projectData = {};
@@ -27,8 +26,6 @@ app.use(cors());
 
 // Initialize the main project folder
 app.use(express.static('website'));
-
-
 app.use(express.json());
 
 // Setup Server
@@ -41,23 +38,31 @@ const server = app.listen(port, listening);
     console.log(`running on localhost: ${port}`);
   };
 
-// GET route
+// GET routes
 
-app.get('/weather', (req, res) => {
-    if (!req.query.search) {
-        return res.send('Please provide a search string...')
-    }
+app.get('/', (req, res) => {
+    console.log ("get request on home");
+    res.send("GET on home");
+});
+
+
+app.get('/all', sendData);
+
+function sendData (request, response) {
+  response.send(projectData);
+  //response.send("test");
+};
+
+
+// POST routes
+app.post('/weather', (req, res) => {
+    let data = [];
+    let zip = req.body.zip;
+    console.log(req.body);
     
-        
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${req.query.search}&appid=ec2a8c3202f503524ea99b9adbc61f8d`;
-    request( { url, json: true }, (error, {body}) => {
-        if (error) {
-            return res.send('Unable to connect.')
-        }
-        console.log(body);
-        res.send(body)
-    })
-})
-app.listen(3000, () => {
-    console.log('Server is up!')
-})
+    
+    const url = `http://api.openweathermap.org/data/2.5/weather?q=${req.body.zip},de&APPID=${apiKey}`
+    //const url = 'http://api.openweathermap.org/data/2.5/weather?q=Hinterweidenthal,de&APPID=ec2a8c3202f503524ea99b9adbc61f8d';
+    request({url: url, json: true}, (error, {body}) => { res.send(body) });
+    projectData
+    });
