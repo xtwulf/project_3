@@ -53,16 +53,61 @@ function sendData (request, response) {
   //response.send("test");
 };
 
+app.get('/recent', sendRecentEntry);
+
+function sendRecentEntry(request, response) {
+  let length = Object.keys(projectData).length;
+  let lastEntry = projectData[length];
+  console.log(length);
+  response.send(projectData[length-1]);
+
+}
 
 // POST routes
 app.post('/weather', (req, res) => {
     let data = [];
     let zip = req.body.zip;
+    let comment = req.body.feeling;
     console.log(req.body);
-    
-    
     const url = `http://api.openweathermap.org/data/2.5/weather?q=${req.body.zip},de&APPID=${apiKey}`
-    //const url = 'http://api.openweathermap.org/data/2.5/weather?q=Hinterweidenthal,de&APPID=ec2a8c3202f503524ea99b9adbc61f8d';
-    request({url: url, json: true}, (error, {body}) => { res.send(body) });
-    projectData
+    
+    request({url: url, json: true}, (error, {body}) => { 
+        res.send(body);
+        //error handling
+        // tbd
+        if (body.cod != "200") {
+          console.log("error");
+          return;
+        }
+        console.log(body.cod);
+
+        //console.log(url);
+        console.log(body);
+        //console.log("Jetzt in projectData schreiben");
+
+        let length = Object.keys(projectData).length;
+        let date = buildDate(body.dt);
+        let temp_celsius = convertTemp(body.main.temp);
+        let temp_kelvin = body.main.temp;
+        
+        projectData[length] = {"date" : date, "feeling" : comment, "temp_kelvin" : temp_kelvin, "temp_celsius" : temp_celsius} ;
+        console.log(projectData);
     });
+});
+
+// helping functions
+function buildDate (res_date) {
+  var date = new Date(res_date*1000);
+  var year = date.getFullYear();
+  var month = date.getMonth()+1;
+  var day = date.getDate();
+  var hour = date.getHours();
+  var minute = date.getMinutes();
+
+  return (`${year} - ${month} - ${day} / ${hour}:${minute}`);
+}
+
+function convertTemp (temp) {
+  return (Math.round((temp-273.15) * 100) / 100);
+  
+}
