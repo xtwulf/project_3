@@ -58,6 +58,10 @@ const updateGui = async (url='') =>{
   // Transform into JSON
   recent_data = await request.json();
   console.log("recent:",recent_data);
+  document.getElementsByClassName('holder entry')[0].style.zIndex = 99;
+  document.getElementById('date').innerHTML = "Date: " + recent_data["date"];
+  document.getElementById('temp').innerHTML = "Temp °C: " + recent_data["temp_celsius"] + "/ K:" + recent_data["temp_kelvin"];
+  document.getElementById('content').innerHTML = "Content: " + recent_data["feeling"];
   
   }
   
