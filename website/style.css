@@ -1,24 +1,47 @@
+/* {
+    border:solid 0.5px lightgrey;
+}
+*/
+h1 {
+    text-align: center;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+p {
+    font-size: 20px;
+    width: 100%;
+}
+
 body{
     background: #fffff8;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+div {
+    padding: 5px;
+}
+
 #app{
-    display: grid;
-    grid-auto-rows: minmax(150px, auto);
+    /*display: grid;*/
+    /*grid-auto-rows: minmax(150px, auto);*/
     /* grid-template-columns:  */
-    height:100vh;
+    /*height:100vh;*/
     background: #f23557;
     color: #f0d43a;
     justify-content: center;
-    grid-gap: 1em;
-    font-size: 20px;
+    /*grid-gap: 1em;*/
+    font-size: 14px;
     font-family: 'Oswald', sans-serif;
 }
 
 .holder{
 
 }
+
+
 
 .entry{
     background: rgba(59, 74, 107, .4);
@@ -41,6 +64,7 @@ body{
 }
 
 .headline {
+    font-size: 24px;
 
 }
 .title{
@@ -50,7 +74,7 @@ body{
 /*  Basic Styling To Override Default For Basic HTML Elements */
 label{
     display:block;
-    font-size: 27px;
+    font-size: 20px;
 }
 
 input{
@@ -62,14 +86,15 @@ input{
     font-size: 20px;
     font-family: 'Oswald', sans-serif;
     border: none;
+    padding: 5px;
 }
 
 button{
-    width: 400px;
+    width: 250px;
     height: 100px;
     background: #3b4a6b;
     color: #f0d43a;
-    font-size: 26px;
+    font-size: 28px;
     font-family: 'Oswald', sans-serif;
     border: none;
     box-shadow: 2px 4px 5px #444;
@@ -109,3 +134,51 @@ button:focus {
     font-family: 'Oswald', sans-serif;
 
 } 
+
+/* grid container styles */
+html, body, .grid-container { height: 100%; margin: 0; }
+
+.grid-container {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 0.5fr 0.5fr 1.8fr 0.0fr 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    "heading heading heading heading heading"
+    "entry_1 entry_1 recent_entries recent_entries recent_entries"
+    "entry_2 entry_2 recent_entries recent_entries recent_entries"
+    "entry_3 entry_3 recent_entries recent_entries recent_entries"
+    "aside_footer1 aside_footer1 button aside_footer2 aside_footer2";
+}
+
+.heading { grid-area: heading; }
+
+.entry_1 { grid-area: entry_1; }
+
+.entry_2 { grid-area: entry_2; }
+
+.recent_entries { grid-area: recent_entries; }
+
+.entry_3 { grid-area: entry_3; display: none;}
+
+.button { grid-area: button; }
+
+.aside_footer1 { grid-area: aside_footer1; }
+
+.aside_footer2 { grid-area: aside_footer2; }
+
+
+/* For debug mode only, must be commented off for prod
+.grid-container * {
+  border: 1px solid lightgrey;
+  position: relative;
+}
+
+.grid-container *:after {
+  content:attr(class);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+*/

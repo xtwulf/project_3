@@ -14,3 +14,9 @@ If you are interested in testing your code as you go, you can use `tests.js` as 
 > Rebuild the DIVs 
 >> the Content layer is actually set to z-index 99 
 >> they should be arranged completly new
+
+> Error handling
+>> invalid zip / unknown city
+
+>additional features
+>> choose country
