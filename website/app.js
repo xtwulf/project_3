@@ -1,20 +1,15 @@
-/* Global Variables */
-
-//const { response } = require("express");
+/* Variables */
 
 var allData = {};
-
-// const express = require("express");
-
 let response_data = {};
-// add event listener to element with id 'generate'
 
+// add event listener to element with id 'generate'
 var el = document.getElementById('generate');
 el.addEventListener("click", postGet, false);
 
+// Async POST functions
 
-// Async POST
-
+// postData makes a POST request to the server with ZIP and Feelig-Input
 const postData = async ( url = '', data = {})=>{
   const response = await fetch(url, {
   method: 'POST', 
@@ -26,11 +21,11 @@ const postData = async ( url = '', data = {})=>{
 });
 
 try {
-    //console.log("response1:", response);
+    // writing the Server response in the newData variable
     const newData = await response.json();
-    console.log("new_data",newData.cod);
+    
+    // checking the response for errors
     if (newData.cod == 404) {
-      
       throw {
         name: 'Input Error',
         message: 'Sorry, we didn´t found a city with ZIP ',
@@ -45,33 +40,22 @@ try {
         code: newData.cod
       }
     }
-/*
-    elseif (newData.cod != 200) {
-      throw {
-        name: 'Application Error',
-        message: 'Ups... Something went wrong with your Entry. Please try again!'
-      }
-    }
-
-*/
-    //response_data = newData;
-    //console.log("response2", response.status);
+    // return the received date for the combined function
     return newData;
   }
   
+  // Error handling
   catch(error) {
-  console.log("msg:",error);
-  
-  if (error.code == 404) {
-    let zip = document.getElementById('zip').value;
-    message = error.name + "\n" + error.message + zip;
-  }
-
-  else {
+    if (error.code == 404) {
+      let zip = document.getElementById('zip').value;
+      message = error.name + "\n" + error.message + zip;
+      }
+    
+    else {
     message = error.name + "\n" + error.message;
-  }
+      }
   
-  alert(message);
+    alert(message);
   }
 };
 
@@ -81,34 +65,31 @@ try {
 const retrieveData = async (url='') =>{ 
 const request = await fetch(url);
 try {
-// Transform into JSON
-allData = await request.json();
-//console.log(allData);
-
+  // Transform into JSON
+  allData = await request.json();
 }
+
 catch(error) {
   console.log("error", error);
-  // appropriately handle the error
+  alert("Sorry... An error occured:\n" + error.message);
 }
 };
 
+// Function for updating the GUI elements
 const updateGui = async (url='') =>{ 
   const request = await fetch(url);
   try {
-  // Transform into JSON
   recent_data = await request.json();
-  console.log("recent:",recent_data);
-  document.getElementsByClassName('holder entry')[0].style.zIndex = 99;
+  
   document.getElementById('date').innerHTML = "Date: " + recent_data["date"];
   document.getElementById('temp').innerHTML = "Temp °C: " + recent_data["temp_celsius"] + "/ K:" + recent_data["temp_kelvin"];
   document.getElementById('content').innerHTML = "Content: " + recent_data["feeling"];
-  
   }
   
   catch(error) {
     console.log("error", error);
-    // appropriately handle the error
-  }
+    alert("Sorry... An error occured:\n" + error.message);
+    }
   };
 
 
@@ -117,45 +98,18 @@ const updateGui = async (url='') =>{
 function postGet(){
   let zip = document.getElementById('zip').value;
   let feeling = document.getElementById('feelings').value;
-
+  
+  //checking if the ZIP field ius empty
   if (!zip) {
     alert(`Please fill in the ZIP field`);
     return;
   }
   
+  // Making the POST request on the /weather route
   postData('/weather', {zip:zip, feeling:feeling})
   
-
-  /*
-  .then(function(data){
-    retrieveData('/all')
-
-  })
-  */
-
-
+  // let´s update the GUI, now the data are available on the server
   .then(function(){
-    
     updateGui('/recent');
-
   })
-  }
-
-
-
-
-
-
-/*    
-function updateGui() {
-  document.getElementsByClassName('holder entry')[0].style.zIndex = 99;
-  
-  
-  //document.getElementById('date').innerHTML = response_data[recent_nr].date;
-
-}*/
-
-
-
-
-
+}
