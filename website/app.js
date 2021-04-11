@@ -1,5 +1,7 @@
 /* Global Variables */
 
+//const { response } = require("express");
+
 var allData = {};
 
 // const express = require("express");
@@ -24,14 +26,25 @@ const postData = async ( url = '', data = {})=>{
 });
 
 try {
+    //console.log("response1:", response);
     const newData = await response.json();
-    //console.log(newData);
+    console.log("new_data",newData.cod);
+    if (newData.cod == 404) {
+      throw {
+        name: 'Application Error',
+        message: 'The data you provided is insufficient'
+      }
+    }
     //response_data = newData;
+    //console.log("response2", response.status);
     return newData;
   }
   
   catch(error) {
-  console.log("error", error);
+  console.log("msg:",error);
+  let zip = document.getElementById('zip').value;
+  alert(`Sorry, there is no city with the ZIP ${zip}...!`);
+
   }
 };
 
@@ -77,12 +90,21 @@ const updateGui = async (url='') =>{
 function postGet(){
   let zip = document.getElementById('zip').value;
   let feeling = document.getElementById('feelings').value;
+
+  if (!zip) {
+    alert(`Please fill in the ZIP field`);
+    return;
+  }
   
   postData('/weather', {zip:zip, feeling:feeling})
+  
+
+  /*
   .then(function(data){
     retrieveData('/all')
 
   })
+  */
 
 
   .then(function(){

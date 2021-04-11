@@ -63,6 +63,29 @@ function sendRecentEntry(request, response) {
 
 }
 
+
+//==== Check ZIP ===//
+/*
+app.get('/check', checkZip);
+
+function checkZip(request, response) {
+//  console.log("check Zip called");
+  // console.log("request body:", request.body);
+  
+
+  let zip = request.body.zip;
+  const url = `http://api.openweathermap.org/data/2.5/weather?q=${request.body.zip},de&APPID=${apiKey}`
+
+  request({url: url, json: true}, (error, {body}) => {
+    console.log(response.body);
+
+  })
+
+  response.send({"status" : false, "error" : "invalid ZIP"});
+}
+*/
+
+
 // POST routes
 app.post('/weather', (req, res) => {
     let data = [];
@@ -72,14 +95,19 @@ app.post('/weather', (req, res) => {
     const url = `http://api.openweathermap.org/data/2.5/weather?q=${req.body.zip},de&APPID=${apiKey}`
     
     request({url: url, json: true}, (error, {body}) => { 
-        res.send(body);
+        
         //error handling
         // tbd
         if (body.cod != "200") {
-          console.log("error");
+          console.log("error, city not found");
+          //res.send("Error, city not found!")
+          res.send(body);
+          console.log("body:",body);
+
           return;
         }
-        console.log(body.cod);
+        
+        res.send(body);
 
         //console.log(url);
         console.log(body);
