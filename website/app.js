@@ -30,11 +30,30 @@ try {
     const newData = await response.json();
     console.log("new_data",newData.cod);
     if (newData.cod == 404) {
+      
       throw {
-        name: 'Application Error',
-        message: 'The data you provided is insufficient'
+        name: 'Input Error',
+        message: 'Sorry, we didn´t found a city with ZIP ',
+        code: newData.cod
       }
     }
+
+    if (newData.cod != 200) {
+      throw {
+        name: 'Application Error',
+        message: 'Sorry, something went wrong...!',
+        code: newData.cod
+      }
+    }
+/*
+    elseif (newData.cod != 200) {
+      throw {
+        name: 'Application Error',
+        message: 'Ups... Something went wrong with your Entry. Please try again!'
+      }
+    }
+
+*/
     //response_data = newData;
     //console.log("response2", response.status);
     return newData;
@@ -42,9 +61,17 @@ try {
   
   catch(error) {
   console.log("msg:",error);
-  let zip = document.getElementById('zip').value;
-  alert(`Sorry, there is no city with the ZIP ${zip}...!`);
+  
+  if (error.code == 404) {
+    let zip = document.getElementById('zip').value;
+    message = error.name + "\n" + error.message + zip;
+  }
 
+  else {
+    message = error.name + "\n" + error.message;
+  }
+  
+  alert(message);
   }
 };
 
