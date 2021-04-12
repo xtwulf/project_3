@@ -40,21 +40,8 @@ const server = app.listen(port, listening);
 
 // GET routes
 
-app.get('/', (req, res) => {
-    console.log ("get request on home");
-    res.send("GET on home");
-});
-
-
-app.get('/all', sendData);
-
-function sendData (request, response) {
-  response.send(projectData);
-  //response.send("test");
-};
-
+// /recent: GET route for the last entry in the projectData list
 app.get('/recent', sendRecentEntry);
-
 function sendRecentEntry(request, response) {
   let length = Object.keys(projectData).length;
   let lastEntry = projectData[length];
@@ -64,32 +51,9 @@ function sendRecentEntry(request, response) {
 }
 
 
-//==== Check ZIP ===//
-/*
-app.get('/check', checkZip);
-
-function checkZip(request, response) {
-//  console.log("check Zip called");
-  // console.log("request body:", request.body);
-  
-
-  let zip = request.body.zip;
-  const url = `http://api.openweathermap.org/data/2.5/weather?q=${request.body.zip},de&APPID=${apiKey}`
-
-  request({url: url, json: true}, (error, {body}) => {
-    console.log(response.body);
-
-  })
-
-  response.send({"status" : false, "error" : "invalid ZIP"});
-}
-*/
-
-
 // POST routes
 app.post('/weather', (req, res) => {
-    let data = [];
-    let zip = req.body.zip;
+       
     let comment = req.body.feeling;
     console.log(req.body);
     const url = `http://api.openweathermap.org/data/2.5/weather?q=${req.body.zip},de&APPID=${apiKey}`
@@ -97,10 +61,9 @@ app.post('/weather', (req, res) => {
     request({url: url, json: true}, (error, {body}) => { 
         
         //error handling
-        // tbd
+        
         if (body.cod != "200") {
           console.log("error, city not found");
-          //res.send("Error, city not found!")
           res.send(body);
           console.log("body:",body);
 
@@ -108,11 +71,6 @@ app.post('/weather', (req, res) => {
         }
         
         res.send(body);
-
-        //console.log(url);
-        console.log(body);
-        //console.log("Jetzt in projectData schreiben");
-
         let length = Object.keys(projectData).length;
         let date = buildDate(body.dt);
         let temp_celsius = convertTemp(body.main.temp);
@@ -123,7 +81,11 @@ app.post('/weather', (req, res) => {
     });
 });
 
-// helping functions
+// ================= //
+// helping functions //
+// ================= //
+
+// buildDate: sticking the date into one string
 function buildDate (res_date) {
   var date = new Date(res_date*1000);
   var year = date.getFullYear();
@@ -135,6 +97,7 @@ function buildDate (res_date) {
   return (`${year} - ${month} - ${day} / ${hour}:${minute}`);
 }
 
+// convertTemp: converts the temp value from kelvin to celsius
 function convertTemp (temp) {
   return (Math.round((temp-273.15) * 100) / 100);
   
