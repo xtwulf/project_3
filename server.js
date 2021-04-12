@@ -56,7 +56,7 @@ app.post('/weather', (req, res) => {
        
     let comment = req.body.feeling;
     console.log(req.body);
-    const url = `http://api.openweathermap.org/data/2.5/weather?q=${req.body.zip},de&APPID=${apiKey}`
+    const url = `http://api.openweathermap.org/data/2.5/weather?q=${req.body.zip},${req.body.country}&APPID=${apiKey}`
     
     request({url: url, json: true}, (error, {body}) => { 
         
@@ -64,6 +64,7 @@ app.post('/weather', (req, res) => {
         
         if (body.cod != "200") {
           console.log("error, city not found");
+          console.log(url);
           res.send(body);
           console.log("body:",body);
 

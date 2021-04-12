@@ -23,7 +23,6 @@ const postData = async ( url = '', data = {})=>{
 try {
     // writing the Server response in the newData variable
     const newData = await response.json();
-    
     // checking the response for errors
     if (newData.cod == 404) {
       throw {
@@ -48,7 +47,10 @@ try {
   catch(error) {
     if (error.code == 404) {
       let zip = document.getElementById('zip').value;
-      message = error.name + "\n" + error.message + zip;
+      
+      let country = document.getElementById('country').value;
+      let country_name = document.getElementById('country').namedItem(country).text;
+      message = error.name + "\n" + error.message + zip + " in country " + country_name;
       }
     
     else {
@@ -96,6 +98,7 @@ const updateGui = async (url='') =>{
 
 // chain the async functions
 function postGet(){
+  let country = document.getElementById('country').value;
   let zip = document.getElementById('zip').value;
   let feeling = document.getElementById('feelings').value;
   
@@ -106,7 +109,7 @@ function postGet(){
   }
   
   // Making the POST request on the /weather route
-  postData('/weather', {zip:zip, feeling:feeling})
+  postData('/weather', {country:country, zip:zip, feeling:feeling})
   
   // let´s update the GUI, now the data are available on the server
   .then(function(){

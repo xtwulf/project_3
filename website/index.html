@@ -10,10 +10,19 @@
 
   <div class="grid-container" id="app">
     <div class="heading"><h1>Weather Journal App</h1></div>
+
     <div class="entry_1">
+      <div class="holder country">
+        <label for="country">Choose a country:</label>
+          <select name="country" id="country">
+            <option value="de" id="de">Germany</option>
+            <option value="us" id="us">United States</option>
+            <option value="gb" id="gb">Great Britain</option>
+          </select>
+      </div>
       <div class ="holder zip">
-        <label for="zip">Enter Zipcode here (must be DE ZIP)</label>
-        <input type="text" id="zip" placeholder="enter zip code here">
+        <label for="zip">Enter Zipcode here</label>
+        <input type="text" id="zip" placeholder="ZIP">
       </div>
     </div>
     <div class="entry_2">
